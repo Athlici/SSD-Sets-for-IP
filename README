@@ -1,0 +1,32 @@
+This is the code repository for our paper, which will soon™ be available on arXiv.
+We'll start by listing the functions of the various files.
+
+There are three programs to find subset sum distinct (SSD) sets:
+  FindSSD - Slow reference implementation using Eigen and list of values
+    5 arguments, norm: 0->delta or 1->|.|_1, dimension, set size, delta lower bound, norm upper bound
+  FindSSD1Fast - Specialized implementation to find 1-dim SSD-sets
+    3 arguments, set size, lower bound, upper bound
+  FindSSD2Fast - Specialized implementation to find 2-dim SSD-sets
+    4 arguments, norm: 0->delta or 1->|.|_1, set size, lower bound, upper bound
+The lower bounds apply to the largest value, not all values!
+All of these output found SSD sets to the command line.
+Additionally, all found sets are written to an output file at the end.
+They can be compiled with a simple g++ command:
+  g++ FindSSD.cpp -o findssd -O3 -std=c++17 -pthread
+
+To find and test whether there is a sign vector turning an SSD-set into a vertex solution we have:
+  TestSigns.cpp - Works through an input, requires Eigen and GuRoBi libraries
+    1 argument, path to file with list of ssd sets, in the format outputted by the FindSSD codes
+Per SSD set at most 1 sign vector is outputted and no file is written at the end of the program.
+If the Eigen library is installed properly it can be compiled something like:
+  g++ TestSigns.cpp -I/opt/gurobi/linux64/include -L/opt/gurobi/linux64/lib/ -lgurobi_c++ -lgurobi100 -pthread -o TestSign
+
+All the codes so far rely on the following library, included in this repo:
+https://github.com/bshoshany/thread-pool
+
+There are two more tools for working with 4ti2:
+  Graver4ti2 - Generate the matrix input from our parameters
+    3 arguments, norm: 0->delta or 1->|.|_1, dimension, parameter size
+  GraverMax - Find the largest elements in a .gra or .cir file
+    2 arguments, norm: 0->support or 1->delta
+The compilation should be straightforward with g++.
